@@ -1,0 +1,22 @@
+{
+  "name": "inventorywebsite",
+  "version": "1.0.0",
+  "description": "A web-app for inventory management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/derekriter/InventoryWebsite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/derekriter/InventoryWebsite/issues"
+  },
+  "homepage": "https://github.com/derekriter/InventoryWebsite#readme",
+  "dependencies": {
+    "vite": "^7.1.3"
+  }
+}
