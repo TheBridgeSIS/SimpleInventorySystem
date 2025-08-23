@@ -16,9 +16,12 @@
     "url": "https://github.com/derekriter/InventoryWebsite/issues"
   },
   "homepage": "https://github.com/derekriter/InventoryWebsite#readme",
+  "dependencies": {
+    "@ericblade/quagga2": "^1.8.4"
+  },
   "devDependencies": {
-    "@ericblade/quagga2": "^1.8.4",
     "@vitejs/plugin-basic-ssl": "^2.1.0",
-    "vite": "^7.1.3"
+    "vite": "^6.3.5",
+    "vite-plugin-terminal": "^1.3.0"
   }
 }

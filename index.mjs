@@ -42,14 +42,13 @@ import Quagga from '@ericblade/quagga2';
 //     return bestID;
 // }
 
-const debugOut = document.querySelector("#debugOut");
-
 // let bestCamID = await findBestCamera();
 Quagga.init({
     inputStream: {
         type: "LiveStream",
         target: document.querySelector("#camera-stream"),
         constraints: {
+            facingMode: "environment",
             // deviceId: bestCamID
         },
         singleChannel: false,
@@ -64,20 +63,15 @@ Quagga.init({
         readers : ["upc_reader", "code_128_reader"],
         multiple: true
     },
-    frequency: 5
+    frequency: 10
 }, async function(err) {
     if(err) {
         console.log(err);
-        alert(err);
         return;
     }
     console.log("Quaggga initialization finished");
     
     Quagga.start();
-    // (await Quagga.CameraAccess.enumerateVideoDevices()).forEach((device) => {
-    //     alert(`ID: ${device.deviceId}\nGroup: ${device.groupId}\nKind: ${device.kind}\nLabel: ${device.label}`);
-    // });
-    // debugOut.innerHTML = `${Quagga.CameraAccess.getActiveStreamLabel()} - ${bestCamID}`;
     
     Quagga.onProcessed(function(results) {
         let ctx = Quagga.canvas.ctx.overlay;
@@ -96,10 +90,6 @@ Quagga.init({
                 if(result.box) {
                     Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, ctx, {color: "blue", lineWidth: 2});
                 }
-                
-                if(result.codeResult && result.code) {
-                    Quagga.ImageDebug.drawPath(result.line, {x: "x", y: "y"}, ctx, {color: "red", lineWidth: 3});
-                }
             }
         }
     });
@@ -108,7 +98,35 @@ Quagga.init({
             let code = result.codeResult.code;
             let format = result.codeResult.format;
             
-            alert(`${code}\n${format}`);
+            let isValid = filterDetection(code, format);
+            if(isValid) {
+                console.log(`Detected ${code}, Format: ${format}`);
+            }
         }
     });
 });
+
+let testingCodes = {};
+const detetionThreshold = 5;
+function filterDetection(code, format) {
+    if(Object.keys(testingCodes).includes(code)) {
+        let data = testingCodes[code];
+        
+        if(data.format === format) {
+            data.detections++;
+        
+            if(data.detections >= detetionThreshold) {
+                testingCodes = {}; //clear all other detections
+                return true;
+            }
+            
+            return false;
+        }
+    }
+    
+    testingCodes[code] = {
+        "format": format,
+        "detections": 1
+    };
+    return false;
+}
