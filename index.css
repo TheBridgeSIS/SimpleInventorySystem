@@ -1,8 +1,21 @@
-#camera-stream {
-    /* width: 100%;
-    overflow: hidden;
+html {
+    font-family: sans-serif;
+}
+
+#interactive.viewport {
+    position: relative;
+    max-width: 800px;
     
-    video {
+    > video {
+        max-width: 100%;
         width: 100%;
-    } */
+    }
+    > canvas {
+        max-width: 100%;
+        width: 100%;
+        
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 }
