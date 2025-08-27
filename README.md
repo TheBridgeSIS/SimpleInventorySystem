@@ -1,1 +1,1 @@
-# inventoryWebsite
+# SimpleInventorySystem
