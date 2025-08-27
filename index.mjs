@@ -1,4 +1,5 @@
 import Quagga from '@ericblade/quagga2';
+import terminal from 'virtual:terminal';
 
 // async function findBestCamera(facingMode) {
 //     let bestID = undefined;
@@ -66,10 +67,10 @@ Quagga.init({
     frequency: 10
 }, async function(err) {
     if(err) {
-        console.log(err);
+        terminal.log(err);
         return;
     }
-    console.log("Quaggga initialization finished");
+    terminal.log("Quaggga initialization finished");
     
     Quagga.start();
     
@@ -100,7 +101,8 @@ Quagga.init({
             
             let isValid = filterDetection(code, format);
             if(isValid) {
-                console.log(`Detected ${code}, Format: ${format}`);
+                terminal.log(`Detected ${code}, Format: ${format}`);
+                alert(`Detected ${code}, Format: ${format}`);
             }
         }
     });

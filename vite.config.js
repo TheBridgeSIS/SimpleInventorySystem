@@ -7,7 +7,7 @@ export default defineConfig({
         basicSsl(),
         pluginTerminal({
             output: ["terminal", "console"],
-            console: "terminal"
+            // console: "terminal"
         })
     ],
     server: {
