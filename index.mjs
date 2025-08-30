@@ -1,56 +1,12 @@
 import Quagga from '@ericblade/quagga2';
 import terminal from 'virtual:terminal';
 
-// async function findBestCamera(facingMode) {
-//     let bestID = undefined;
-//     let bestRes = 0;
-//     try {
-//         let deviceList = await navigator.mediaDevices.enumerateDevices();
-//         for(let device of deviceList) {
-//             // alert(device.deviceId);
-//             let stream = await navigator.mediaDevices.getUserMedia({video: true});
-//             // alert(JSON.stringify(stream));
-            
-//             alert(`${JSON.stringify(device)}\n\n${JSON.stringify(stream)}`);
-            
-//             for(let track of stream.getVideoTracks()) {
-//                 let capabilities = track.getCapabilities();
-                
-//                 if(facingMode && capabilities.facingMode !== facingMode)
-//                     continue;
-                
-//                 // alert(JSON.stringify(track));
-//                 // alert(JSON.stringify(capabilities.width));
-                
-//                 let width = capabilities.width?.max ?? capabilities.width?.min ?? 0;
-//                 let height = capabilities.height?.max ?? capabilities.height?.min ?? 0;
-//                 let res = width * height;
-                
-//                 // alert(res);
-                
-//                 if(res > bestRes) {
-//                     // alert(track.getSettings().deviceId);
-//                     bestRes = res;
-//                     bestID = track.getSettings().deviceId;
-//                 }
-//             }
-//         }
-//     }
-//     catch(err) {
-//         alert(err);
-//     }
-    
-//     return bestID;
-// }
-
-// let bestCamID = await findBestCamera();
 Quagga.init({
     inputStream: {
         type: "LiveStream",
         target: document.querySelector("#camera-stream"),
         constraints: {
-            facingMode: "environment",
-            // deviceId: bestCamID
+            facingMode: "environment"
         },
         singleChannel: false,
     },
