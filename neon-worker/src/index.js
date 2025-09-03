@@ -20,6 +20,9 @@ export default {
         if(!env.ACCESS_KEY) {
             return new Response("Internal Server Error: Server misconfigured, ACCESS_KEY missing from env. Please try again later.", {status: 503}); //503 = Service Unavailable
         }
+        if(!env.DB_URL) {
+            return new Response("Internal Server Error: Server misconfigured, DB_KEY missing from env. Please try again later.", {status: 503}); //503 = Service Unavailable
+        }
         
         const keyIn = request.headers.get("Access-Key");
         if(keyIn !== env.ACCESS_KEY) {
@@ -36,27 +39,40 @@ export default {
             operation = JSON.parse(opIn);
         }
         catch(err) {
-            return new Response("Client Error: DB-Operation was not valid JSON", {status: 400}); //400 = Bad Request
+            return new Response("Client Error: DB-Operation was not valid JSON", {status: 400});
         }
         if(!operation.operation) {
-            return new Response("Client Error: DB-Operation missing value 'operation'", {status: 400}); //400 = Bad Request
+            return new Response("Client Error: DB-Operation missing value 'operation'", {status: 400});
         }
         
+        /*
+        Allowed formats:
+        {
+            "operation": "getItemByID",
+            "pid": "<some number here>"
+        } => Row with the matching pid
+        {
+            "operation": "getAllItems"
+        } => List of all rows in inventory
+        */
+        
+        const sql = neon(env.DB_URL);
         switch(operation.operation) {
-            case "read": {
-                break;
+            case "getItemByID": {
+                if(!operation.pid) {
+                    return new Response("Client Error: DB-Operation 'getItemByID' missing 'pid' argument", {status: 400});
+                }
+                
+                const result = await sql`SELECT * FROM inventory WHERE pid=${operation.pid}`;
+                return new Response(JSON.stringify(result));
+            }
+            case "getAllItems": {
+                const result = await sql`SELECT * FROM inventory`;
+                return new Response(JSON.stringify(result));
             }
             default: {
                 return new Response(`Client Error: Invalid DB-Operation '${opIn}'`, {status: 400}); //400 = Bad Request
             }
         }
-        
-        if(!env.DB_URL) {
-            return new Response("Internal Server Error: Server misconfigured, DB_KEY missing from env. Please try again later.", {status: 503}); //503 = Service Unavailable
-        }
-        const sql = neon(env.DB_URL);
-        
-        const post = await sql`SELECT * FROM inventory`;
-        return new Response(JSON.stringify(post));
     }
 };
