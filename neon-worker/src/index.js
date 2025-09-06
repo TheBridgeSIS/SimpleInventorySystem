@@ -23,7 +23,7 @@ export default {
             return new Response("Internal Server Error: Server misconfigured, DB_KEY missing from env. Please try again later.", {status: 503, headers: {
                 "Content-Type": "text/plain",
                 ...CORS
-            }}); //503 = Service Unavailable
+            }});
         }
         
         
@@ -32,7 +32,8 @@ export default {
             return new Response(null, {status: 200, headers: CORS});
         }
         
-        const keyIn = request.headers.get("Access-Key");
+        let keyIn = request.headers.get("Access-Key") || "";
+        keyIn = keyIn.replace(/[\u{0100}-\u{FFFF}]/gu, "?").replace(/\s/g, ""); //input filtering
         if(keyIn !== env.ACCESS_KEY) {
             return new Response("Client Error: Invalid access key.", {status: 401, headers: {
                 "Content-Type": "text/plain",
