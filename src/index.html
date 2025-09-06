@@ -18,9 +18,20 @@
     <body>
         <div id="interactive" class="viewport"></div>
         <div id="scanResults">
-            <p>Name</p>
-            <p>PID</p>
-            <p>Count</p>
+            <form autocomplete="off">
+                <div>
+                    <p id="scanResults-name"></p>
+                    <p id="scanResults-pid"></p>
+                </div>
+                <div>
+                    <input id="scanResults-countOp-add" type="radio" name="countOp" value="add" checked disabled/>
+                    <label for="add">Add</label><br/>
+                    <input id="scanResults-countOp-remove" type="radio" name="countOp" value="remove" disabled/>
+                    <label for="remove">Remove</label>
+                </div>
+                <input id="scanResults-count" type="number" name="deltaCount" disabled/>
+                <button id="scanResults-submit" type="submit" disabled>Submit</button>
+            </form>
         </div>
         
         <script src="index.mjs" type="module"></script>

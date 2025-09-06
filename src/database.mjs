@@ -1,4 +1,4 @@
-import {terminal} from "virtual:terminal"
+import {terminal} from "virtual:terminal";
 
 const WORKER_URL = "https://neon-worker.thebridgesis.workers.dev";
 // const WORKER_URL = "https://192.168.1.27:8787";
@@ -62,11 +62,74 @@ export async function loadItem(pid) {
     }
     
     try {
-        return await res.json();
+        let json = await res.json();
+        if(Array.isArray(json)) {
+            if(json.length === 0) {
+                terminal.log(`Parse error, invalid data: ${json}`);
+                return undefined;
+            }
+            
+            json = json[0]; //should only ever be one result because PID is unique
+        }
+        return new Item(json.pid, json.name, json.short_name, json.count);
     }
     catch(err) {
         terminal.log(`JSON parse error: ${err}`);
         terminal.log(await res.text());
         return undefined;
+    }
+}
+
+export async function sendCountChange(pid, delta) {
+    const key = getAccessKey();
+    if(key == null) {
+        terminal.log("Missing access key");
+        return false;
+    }
+    
+    const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: {
+            "Access-Key": key,
+            "DB-Operation": JSON.stringify({
+                "operation": "deltaItemByID",
+                "pid": pid,
+                "delta": delta
+            })
+        }
+    }).catch((err) => {
+        terminal.log(`Fetch error: ${err}`);
+        return false;
+    });
+    
+    if(!res) return res;
+    
+    if(!res.ok) {
+        terminal.log(`DB Error [${res.status}]: ${await res.text()}`);
+        return false;
+    }
+    
+    return true;
+}
+
+export class Item {
+    constructor(pid, name, short_name, count) {
+        this.pid = pid;
+        this.name = name;
+        this.short_name = short_name;
+        this.count = count;
+    }
+    
+    getPID() {
+        return this.pid;
+    }
+    getName() {
+        return this.name;
+    }
+    getDisplayName() {
+        return this.short_name || getName();
+    }
+    getCount() {
+        return this.count;
     }
 }

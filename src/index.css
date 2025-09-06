@@ -1,5 +1,9 @@
 html {
     font-family: sans-serif;
+    font-size: 12pt;
+}
+body {
+    overflow: hidden;
 }
 
 #interactive.viewport {
@@ -21,5 +25,48 @@ html {
 }
 
 #scanResults {
-    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #69d356;
+    padding: 3px;
+    
+    >form {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 10px;
+        
+        >:first-child {
+            flex: 1;
+            min-width: 0;
+            overflow-x: scroll;
+            
+            >p {
+                margin: 0;
+                text-wrap: wrap;
+            }
+            #scanResults-pid {
+                font-size: 0.75em;
+            }
+        }
+        >:nth-child(2) {
+            flex-shrink: 0;
+            flex-basis: auto;
+            
+            >label {
+                font-size: 0.9em;
+            }
+        }
+        #scanResults-count {
+            width: 8ch;
+            flex-shrink: 0;
+            flex-basis: auto;
+        }
+        #scanResults-submit {
+            flex-shrink: 0;
+            flex-basis: auto;
+        }
+    }
 }

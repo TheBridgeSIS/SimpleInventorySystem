@@ -1,5 +1,5 @@
 import Quagga from '@ericblade/quagga2';
-import {terminal} from "virtual:terminal"
+import {terminal} from "virtual:terminal";
 
 export function initQuagga(onDetected) {
     Quagga.init({
@@ -26,10 +26,8 @@ export function initQuagga(onDetected) {
             terminal.log(err);
             return;
         }
-        terminal.log("Quagga initialization finished");
         
         Quagga.start();
-        
         Quagga.onProcessed(function(results) {
             let ctx = Quagga.canvas.ctx.overlay;
             let canvas = Quagga.canvas.dom.overlay;
@@ -51,11 +49,13 @@ export function initQuagga(onDetected) {
             }
         });
         Quagga.onDetected(onDetected);
+        
+        terminal.log("Quagga initialization finished");
     });
 }
 
 let testingCodes = {};
-const detetionThreshold = 5;
+const detetionThreshold = 3;
 export function filterDetection(code, format) {
     if(Object.keys(testingCodes).includes(code)) {
         let data = testingCodes[code];
