@@ -3,6 +3,11 @@ import basicSsl from "@vitejs/plugin-basic-ssl"
 import pluginTerminal from "vite-plugin-terminal"
 
 export default defineConfig({
+    root: "src",
+    build: {
+        outDir: "../dist",
+        emptyOutDir: true
+    },
     plugins: [
         basicSsl(),
         pluginTerminal({

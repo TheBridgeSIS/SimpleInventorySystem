@@ -40,7 +40,7 @@ async function handleDetection(result) {
         const pid = document.querySelector("#scanResults>p:nth-child(2)");
         const count = document.querySelector("#scanResults>p:last-child");
         
-        name.innerHTML = `Name: ${item.name}`;
+        name.innerHTML = `Name: ${item.short_name || item.name}`;
         pid.innerHTML = `PID: ${item.pid}`;
         count.innerHTML = `Count : ${item.count}`;
         document.getElementById("scanResults").style.display = "block";
