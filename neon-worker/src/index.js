@@ -70,11 +70,16 @@ export default {
         Allowed formats:
         {
             "operation": "getItemByID",
-            "pid": "<some number here>"
+            "pid": "<string>"
         } => Row with the matching pid
         {
             "operation": "getAllItems"
         } => List of all rows in inventory
+        {
+            "operation": "deltaItemByID",
+            "pid": "<string>",
+            "delta": <number>
+        }
         */
         
         const sql = neon(env.DB_URL);
@@ -87,14 +92,40 @@ export default {
                     }});
                 }
                 
-                const result = await sql`SELECT * FROM inventory WHERE pid=${operation.pid}`;
+                const result = await sql`SELECT * FROM inventory WHERE pid=${operation.pid};`;
                 return new Response(JSON.stringify(result), {status: 200, headers: {
                     "Content-Type": "application/json",
                     ...CORS
                 }});
             }
             case "getAllItems": {
-                const result = await sql`SELECT * FROM inventory`;
+                const result = await sql`SELECT * FROM inventory;`;
+                return new Response(JSON.stringify(result), {status: 200, headers: {
+                    "Content-Type": "application/json",
+                    ...CORS
+                }});
+            }
+            case "deltaItemByID": {
+                if(!operation.pid) {
+                    return new Response("Client Error: DB-Operation 'deltaItemByID' missing 'pid' argument", {status: 400, headers: {
+                        "Content-Type": "text/plain",
+                        ...CORS
+                    }});
+                }
+                if(!operation.delta) {
+                    return new Response("Client Error: DB-Operation 'deltaItemByID' missing 'delta' argument", {status: 400, headers: {
+                        "Content-Type": "text/plain",
+                        ...CORS
+                    }});
+                }
+                if(typeof(operation.delta) !== "number") {
+                    return new Response("Client Error: DB-Operation 'deltaItemByID', argument 'delta' must be a number", {status: 400, headers: {
+                        "Content-Type": "text/plain",
+                        ...CORS
+                    }});
+                }
+                
+                const result = await sql`UPDATE inventory SET count=count+${operation.delta} WHERE pid=${operation.pid};`;
                 return new Response(JSON.stringify(result), {status: 200, headers: {
                     "Content-Type": "application/json",
                     ...CORS

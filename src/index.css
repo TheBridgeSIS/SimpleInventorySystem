@@ -48,7 +48,7 @@ body {
                 text-wrap: wrap;
             }
             #scanResults-pid {
-                font-size: 0.75em;
+                font-size: 10pt;
             }
         }
         >:nth-child(2) {
@@ -56,7 +56,7 @@ body {
             flex-basis: auto;
             
             >label {
-                font-size: 0.9em;
+                font-size: 11pt;
             }
         }
         #scanResults-count {
@@ -67,6 +67,16 @@ body {
         #scanResults-submit {
             flex-shrink: 0;
             flex-basis: auto;
+        }
+    }
+    #itemStats {
+        border-collapse: collapse;
+        width: 100%;
+        table-layout: fixed;
+        
+        th, td {
+            font-size: 11pt;
+            border: 1px solid black;
         }
     }
 }

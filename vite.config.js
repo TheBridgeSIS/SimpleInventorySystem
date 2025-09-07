@@ -4,9 +4,10 @@ import pluginTerminal from "vite-plugin-terminal"
 
 export default defineConfig({
     root: "src",
+    publicDir: "../public",
     build: {
         outDir: "../dist",
-        emptyOutDir: true
+        emptyOutDir: true,
     },
     plugins: [
         basicSsl(),
@@ -18,5 +19,5 @@ export default defineConfig({
     server: {
         host: true,
         https: true //use https because getUserMedia requires it
-    }
+    },
 });
